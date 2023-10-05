@@ -25,10 +25,14 @@ function generateOTP() {
 
 // Create a nodemailer transporter
 const transporter = nodemailer.createTransport({
-  service: process.env.MAIL_SERVICE, 
+  service: 'gmail',
   auth: {
     user: process.env.MAIL_USER,
     pass: process.env.MAIL_PASS,
+  },
+  secure: false, // Use TLS (not SMTPS), so secure should be false
+  tls: {
+    rejectUnauthorized: false, // Allows self-signed certificates (only for development)
   },
 });
 
@@ -102,14 +106,14 @@ exports.requestService = async (req, res) => {
     );
 
     // Send a welcome email
-    // const mailOptions = {
-    //   from: process.env.MAIL_USER,
-    //   to: email,
-    //   subject: 'Welcome to Equity Care Global',
-    //   html: 'Thank you for registering with our service! You can <a href="/client-login">login</a> to view your profile.',
-    // };
+    const mailOptions = {
+      from: process.env.MAIL_USER,
+      to: email,
+      subject: 'Welcome to Equity Care Global',
+      html: 'Thank you for registering with our service! You can <a href="/client-login">login</a> to view your profile.',
+    };
 
-    // await transporter.sendMail(mailOptions);
+    await transporter.sendMail(mailOptions);
     res.redirect("/client-login?message=Registration successful. Welcome email sent")
   } catch (error) {
     res.status(500).send({ message: error.message || 'Error occurred' });
@@ -221,7 +225,7 @@ exports.becomeCaregiver = async (req, res) => {
         html: 'Thank you for registering as a caregiver with our service! You can <a href="/caregiver-login">login</a> to access your caregiver profile.',
       };
   
-      // await transporter.sendMail(mailOptions);
+      await transporter.sendMail(mailOptions);
      
       res.redirect("/caregiver-login?message=Registration successful. Welcome email sent")
     } catch (error) {
@@ -266,16 +270,15 @@ exports.clientLogin = async (req, res) => {
       text: `Your OTP for login is: ${otp}`,
     };
 
-    // transporter.sendMail(mailOptions, (error, info) => {
-    //   if (error) {
-    //      return res.render('client-login', {
-    //        error: 'Failed to send OTP',
-    //      });
-    //   } else {
-    //     return res.redirect(`/client-otp?email=${encodeURIComponent(email)}`);
-    //   }
-    // });
-    return res.redirect(`/client-otp?email=${encodeURIComponent(email)}`);
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+         return res.render('client-login', {
+           error: 'Failed to send OTP',
+         });
+      } else {
+        return res.redirect(`/client-otp?email=${encodeURIComponent(email)}`);
+      }
+    });
   } catch (error) {
     return res.status(500).json({message: error.message || 'Error occurred' });
   }
@@ -317,16 +320,15 @@ exports.caregiverLogin = async (req, res) => {
       text: `Your OTP for login is: ${otp}`,
     };
 
-    // transporter.sendMail(mailOptions, (error, info) => {
-    //   if (error) {
-    //      return res.render('caregiver-login', {
-    //        error: 'Failed to send OTP',
-    //      });
-    //   } else {
-    //     return res.redirect(`/caregiver-otp?email=${encodeURIComponent(email)}`);
-    //   }
-    // });
-    return res.redirect(`/caregiver-otp?email=${encodeURIComponent(email)}`);
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+         return res.render('caregiver-login', {
+           error: 'Failed to send OTP',
+         });
+      } else {
+        return res.redirect(`/caregiver-otp?email=${encodeURIComponent(email)}`);
+      }
+    });
   } catch (error) {
     return res.status(500).json({ message: error.message || 'Error occurred' });
   }
@@ -414,19 +416,18 @@ exports.adminLogin = async (req, res) => {
       text: `Your OTP for login is: ${otp}`,
     };
 
-    return res.redirect(`/admin-otp?email=${encodeURIComponent(email)}`);
-
-    // transporter.sendMail(mailOptions, (error, info) => {
-    //   if (error) {
-    //     return res.render('admin-login', {
-    //       title: 'Admin Login',
-    //       error: 'Failed to send OTP',
-    //     });
-    //   } else {
-    //     // Redirect to the "admin-otp" page
-    //    return res.redirect(`/admin-otp?email=${encodeURIComponent(email)}`);
-    //   }
-    // });
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+        return res.render('admin-login', {
+          title: 'Admin Login',
+          error: 'Failed to send OTP',
+        });
+      } else {
+        // Redirect to the "admin-otp" page
+       return res.redirect(`/admin-otp?email=${encodeURIComponent(email)}`);
+      }
+    });
   } catch (error) {
     // Render the HTML form with an error message
     return res.render('admin-login', {

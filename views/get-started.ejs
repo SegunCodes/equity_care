@@ -279,7 +279,7 @@
     const toggleServiceRequestButton = document.getElementById('toggleServiceRequestForm');
 
     // Initially, show "Become a Caregiver" form and hide "Request for Service" form
-    caregiverForm.style.display = 'block';
+    caregiverForm.style.display = 'none';
     serviceRequestForm.style.display = 'none';
 
     toggleCaregiverButton.addEventListener('click', () => {
@@ -293,7 +293,7 @@
     });
 </script>
 
-<style>
+<!-- <style>
 .button-container {
     display: flex;
     justify-content: center; 
@@ -302,5 +302,32 @@
         justify-content: center;
     }
 }
+</style> -->
+
+<style>
+    .button-container {
+        display: flex;
+        justify-content: center; 
+    
+        @media screen and (max-width: 768px) {
+            flex-direction: column; /* Stack buttons vertically on small screens */
+            align-items: center; /* Center buttons horizontally on small screens */
+        }
+    }
+    
+    /* Default button style */
+    .theme_btn {
+        font-size: 18px; /* Adjust the font size */
+        padding: 10px 20px; /* Adjust the padding */
+    }
+    
+    /* Button style for small screens */
+    @media screen and (max-width: 768px) {
+        .theme_btn {
+            font-size: 14px; /* Smaller font size for small screens */
+            padding: 8px 16px; /* Smaller padding for small screens */
+        }
+    }
 </style>
+    
   
