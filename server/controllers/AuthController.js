@@ -113,7 +113,16 @@ exports.requestService = async (req, res) => {
       html: 'Thank you for registering with our service! You can <a href="/client-login">login</a> to view your profile.',
     };
 
+     // Send an email to admin
+    const adminMail = {
+      from: process.env.MAIL_USER,
+      to: "equitycaregloballtd@gmail.com",
+      subject: 'New Service Request',
+      html: `${first_name} is requesting for a ${type_of_service} for ${recipient_name}. Login to your <a href="/admin-login">dashboard</a> to view their profile.`,
+    };
+
     await transporter.sendMail(mailOptions);
+    await transporter.sendMail(adminMail);
     res.redirect("/client-login?message=Registration successful. Welcome email sent")
   } catch (error) {
     res.status(500).send({ message: error.message || 'Error occurred' });
@@ -224,8 +233,17 @@ exports.becomeCaregiver = async (req, res) => {
         subject: 'Welcome to Equity Care Gloabal',
         html: 'Thank you for registering as a caregiver with our service! You can <a href="/caregiver-login">login</a> to access your caregiver profile.',
       };
+
+        // Send an email to admin
+      const adminMail = {
+        from: process.env.MAIL_USER,
+        to: "equitycaregloballtd@gmail.com",
+        subject: 'New Caregiver',
+        html: `${first_name} is wants to be a caregiver. Login to your <a href="/admin-login">dashboard</a> to view their profile.`,
+      };
   
       await transporter.sendMail(mailOptions);
+      await transporter.sendMail(adminMail);
      
       res.redirect("/caregiver-login?message=Registration successful. Welcome email sent")
     } catch (error) {
