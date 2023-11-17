@@ -10,5 +10,6 @@ router.get('/clients', AdminController.viewAllClients)
 router.get('/caregivers', AdminController.viewAllCaregivers)
 router.get('/clients/:clientId', AdminController.viewClientById)
 router.get('/caregivers/:caregiverId', AdminController.viewCaregiverById)
+router.get('/export-excel/:name', AdminController.exportExcel)
 
 module.exports = router

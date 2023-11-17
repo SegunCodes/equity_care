@@ -434,6 +434,8 @@ exports.adminLogin = async (req, res) => {
       text: `Your OTP for login is: ${otp}`,
     };
 
+    // return res.redirect(`/admin-otp?email=${encodeURIComponent(email)}`);
+
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         console.log(error);

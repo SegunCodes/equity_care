@@ -1,4 +1,5 @@
 const dbPool = require('../models/db');
+const ExcelJS = require('exceljs');
 
 const isAuthenticated = (req, res, next) => {
   if (req.session.adminId) {
@@ -70,6 +71,49 @@ exports.viewCaregiverById = [isAuthenticated, async (req, res) => {
     } catch (error) {
       return res.status(500).json({ message: 'Error occurred' });
     }
+}];
+
+exports.exportExcel = [isAuthenticated, async (req, res) => {
+  try {
+    const name = req.params.name;
+
+    if (name !== "clients" && name !== "caregivers") {
+      return res.status(400).json({ message: 'Invalid table' });
+    }
+
+    // Fetch all data from the database
+    const [data] = await dbPool.execute(`SELECT * FROM ${name}`);
+
+    // Create a new Excel workbook and worksheet
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet(name.charAt(0).toUpperCase() + name.slice(1)); // Capitalize the first letter
+
+    // Fetch column names from the database
+    const [columns] = await dbPool.execute(`DESCRIBE ${name}`);
+    const headers = columns.map(column => column.Field);
+
+    // Add column headers to the worksheet
+    worksheet.addRow(headers);
+
+    // Add data to the worksheet
+    data.forEach(row => {
+      const rowData = headers.map(header => row[header]);
+      worksheet.addRow(rowData);
+    });
+
+    // Set up the response headers for Excel file download
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', `attachment; filename=${name}.xlsx`);
+
+    // Pipe the Excel workbook to the response stream
+    await workbook.xlsx.write(res);
+
+    // End the response
+    res.end();
+  } catch (error) {
+    console.error('Error exporting data to Excel:', error);
+    res.status(500).send('Internal Server Error');
+  }
 }];
 
   
