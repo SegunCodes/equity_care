@@ -4,9 +4,11 @@ const session = require("express-session")
 const cors = require('cors')
 const app = express()
 const port = process.env.PORT || 3003
+const path = require('path');
 
 require('dotenv').config()
 
+app.use('/files', express.static(path.join(__dirname, 'files')));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}))
 app.use(cors())

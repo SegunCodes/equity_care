@@ -110,8 +110,13 @@ exports.requestService = async (req, res) => {
       from: process.env.MAIL_USER,
       to: email,
       subject: 'Welcome to Equity Care Global',
-      html: 'Thank you for registering with our service! You can <a href="/client-login">login</a> to view your profile.',
-    };
+      html: `
+          <p>Thank you for registering with our service!</p>
+          <p>You can <a href="/client-login">login</a> to view your profile.</p>
+          <p>Learn more about our privacy policy: <a href="/files/EQUITY CARE GLOBAL - PRIVACY POLICY.pdf" download="EQUITY CARE GLOBAL - PRIVACY POLICY.pdf">Certificate</a></p>
+      `,
+  };
+  
 
      // Send an email to admin
     const adminMail = {
@@ -230,9 +235,14 @@ exports.becomeCaregiver = async (req, res) => {
       const mailOptions = {
         from: process.env.MAIL_USER,
         to: email,
-        subject: 'Welcome to Equity Care Gloabal',
-        html: 'Thank you for registering as a caregiver with our service! You can <a href="/caregiver-login">login</a> to access your caregiver profile.',
+        subject: 'Welcome to Equity Care Global',
+        html: `
+            <p>Thank you for registering as a caregiver with our service!</p>
+            <p>You can <a href="/caregiver-login">login</a> to access your caregiver profile.</p>
+            <p>Learn more about what we do and stand for: <a href="/files/EQUITY CARE GLOBAL.pdf" download="EQUITY CARE GLOBAL.pdf">Download</a></p>
+        `,
       };
+    
 
         // Send an email to admin
       const adminMail = {
