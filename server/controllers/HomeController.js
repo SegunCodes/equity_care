@@ -167,7 +167,7 @@ exports.sendMessage = async (req, res) => {
         } else {
          return res.render('contact', {
             title: 'Equitycare Global | Contact',
-            error: 'Message sent successfully',
+            message: 'Message sent successfully',
           });
         }
       });
