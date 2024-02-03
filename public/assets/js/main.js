@@ -417,3 +417,9 @@ $(document).ready(function() {
   });   
 
 })(jQuery);
+
+// Stoping the user from Accidentally resubmitting their contact form details
+// In case of an Error
+if ( window.history.replaceState ) {
+	window.history.replaceState( null, null, window.location.href );
+  }
