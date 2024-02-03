@@ -147,7 +147,7 @@ exports.sendMessage = async (req, res) => {
   
       const mailOptions = {
         from: process.env.MAIL_USER,
-        to: 'efeeloobenedict@gmail.com',//'equitycaregloballtd@gmail.com',
+        to: 'equitycaregloballtd@gmail.com',
         subject: 'New Contact Message',
         html: `
         <table id="bodyTable" style="table-layout: fixed; background-color: #f9f9f9;" border="0" width="100%" cellspacing="0" cellpadding="0">
