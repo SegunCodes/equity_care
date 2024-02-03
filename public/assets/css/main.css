@@ -8470,7 +8470,8 @@ input.main-search-input:-ms-input-placeholder {
 
 @media (max-width: 767px) {
   .details__social {
-    text-align: center !important;
+    text-align: left !important;
+    margin-left: -11px;
   }
 }
 .details__social a {
