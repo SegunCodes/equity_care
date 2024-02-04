@@ -21,4 +21,8 @@ router.get('/admin-login', checkAuth, HomeController.adminLogin)
 router.get('/admin-otp', checkAuth, HomeController.adminOtp)
 router.get('/logout', checkAuth, HomeController.logout)
 
+router.get('/message', HomeController.reContact);
+router.post('/message', HomeController.sendMessage);
+
+
 module.exports = router
